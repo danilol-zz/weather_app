@@ -1,0 +1,9 @@
+<section class="search-form">
+</section>
+
+<h1>City</h1>
+<%= @report["name"] %>
+
+<h3>Weather</h3>
+<%= "#{@report["weather"][0]["main"]} - #{@report["weather"][0]["description"]}" %>
+<%= image_tag "http://openweathermap.org/img/w/" + @report["weather"][0]["icon"] + ".png"; %>

@@ -1,4 +1,5 @@
 require 'rails_helper'
+
 describe WeatherReport do
   describe ".random_search", vcr: true do
     let(:weather_report) { described_class.new }
