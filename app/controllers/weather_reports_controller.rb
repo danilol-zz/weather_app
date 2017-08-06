@@ -10,6 +10,6 @@ class WeatherReportsController < ApplicationController
   private
 
   def report_params
-    params.permit(:city)
+    params.permit(:city, :lat, :lon)
   end
 end
