@@ -29,7 +29,7 @@ class WeatherReport
 
     if options[:city].present?
       request_params.merge(q: options[:city])
-    else
+    elsif options[:lat] and options[:lon]
       request_params.merge(lat: rand_lat, lon: rand_lon)
     end
   end
