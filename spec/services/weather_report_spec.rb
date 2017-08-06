@@ -5,15 +5,30 @@ describe WeatherReport do
 
   context ".fetch", vcr: { record: :once } do
     context "by city" do
-      let(:options) { { city: "Berlin" } }
+      context "when the city exists" do
+        let(:options) { { city: "Berlin" } }
 
-      before { weather_report.fetch }
+        before { weather_report.fetch }
 
-      it "returns the city weather" do
-        expect(weather_report.response).to be_a OpenStruct
-        expect(weather_report.response.success?).to be true
-        expect(weather_report.response.city).to           eq "Berlin"
-        expect(weather_report.response.weather[:main]).to eq "Clear"
+        it "returns the city weather" do
+          expect(weather_report.response).to be_a OpenStruct
+          expect(weather_report.response.success?).to be true
+          expect(weather_report.response.city).to           eq "Berlin"
+          expect(weather_report.response.weather[:main]).to eq "Clear"
+        end
+      end
+
+      context "when the city doesn't exist" do
+        let(:options) { { city: "12312212121" } }
+
+        before { weather_report.fetch }
+
+        it "returns the city weather" do
+          expect(weather_report.response).to be_a OpenStruct
+          expect(weather_report.response.success?).to be false
+          expect(weather_report.response.cod).to      eq "404"
+          expect(weather_report.response.message).to  eq "city not found"
+        end
       end
     end
 

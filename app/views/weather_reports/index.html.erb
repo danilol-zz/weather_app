@@ -30,19 +30,20 @@
       </div>
     </div>
   <% end %>
-
-
 </section>
 
 <section class="search-results">
   <header>
     <h1 class="h3">Weather Report</h1>
   </header>
+
+
+  <% if @report.success? %>
   <ol class="list-group">
     <li class="list-group-item clearfix" ng-repeat="customer in customers">
       <h3 class="pull-right">
         <small class="text-uppercase">Time</small>
-        <%= Time.now %>
+        <%= Date.today %>
       </h3>
       <h2 class="h3">
         <%= @report.city %> <%= @report.country %>
@@ -53,7 +54,6 @@
        </h2>
 
       <h4>Weather</h4>
-
       <small>
         <%= "#{@report.weather[:main]} - #{@report.weather[:description]}" %>
         <%= image_tag @report.weather[:icon] %>
@@ -75,4 +75,14 @@
       </small>
     </li>
   </ol>
+<% else %>
+  <ol class="list-group">
+    <li class="list-group-item clearfix" ng-repeat="customer in customers">
+      <h3 class="pull-right">
+        <small class="text-uppercase">Error</small>
+        <%= @report.cod %> - <%= @report.message %>
+      </h3>
+    </li>
+  </ol>
+<% end %>
 </section>

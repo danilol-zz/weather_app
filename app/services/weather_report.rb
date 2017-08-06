@@ -16,7 +16,12 @@ class WeatherReport
   end
 
   def fetch
-    @response = build_response(HTTParty.get(SERVICE_URL, query: build_params))
+    result = call_api
+    @response = if result.success?
+                  build_response(result)
+                else
+                  build_error_response(result)
+                end
   end
 
   private
@@ -48,6 +53,10 @@ class WeatherReport
     "#{ICON_URL}/#{icon}.png"
   end
 
+  def call_api
+    HTTParty.get(SERVICE_URL, query: build_params)
+  end
+
   def build_response(api_response)
     OpenStruct.new(
       city: api_response["name"],
@@ -65,6 +74,14 @@ class WeatherReport
         pressure: api_response["main"]["pressure"]
       },
       success?: true
+    )
+  end
+
+  def build_error_response(api_response)
+    OpenStruct.new(
+      cod: api_response["cod"],
+      message: api_response["message"],
+      success?: false
     )
   end
 end

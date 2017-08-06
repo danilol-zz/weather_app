@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: http://api.openweathermap.org/data/2.5/weather?appid=c4ec15791ed2c066cca8dd5d51ad6a74&lat=-23.43&lon=-45.07&units=metric
+    uri: http://api.openweathermap.org/data/2.5/weather?appid=c4ec15791ed2c066cca8dd5d51ad6a74&q=12312212121&units=metric
     body:
       encoding: US-ASCII
       string: ''
@@ -15,8 +15,8 @@ http_interactions:
       - Ruby
   response:
     status:
-      code: 200
-      message: OK
+      code: 404
+      message: Not Found
     headers:
       Server:
       - openresty
@@ -25,11 +25,11 @@ http_interactions:
       Content-Type:
       - application/json; charset=utf-8
       Content-Length:
-      - '433'
+      - '40'
       Connection:
       - keep-alive
       X-Cache-Key:
-      - "/data/2.5/weather?lat=-23.43&lon=-45.07&units=metric"
+      - "/data/2.5/weather?q=12312212121&units=metric"
       Access-Control-Allow-Origin:
       - "*"
       Access-Control-Allow-Credentials:
@@ -38,8 +38,7 @@ http_interactions:
       - GET, POST
     body:
       encoding: UTF-8
-      string: '{"coord":{"lon":-45.07,"lat":-23.43},"weather":[{"id":800,"main":"Clear","description":"clear
-        sky","icon":"01n"}],"base":"stations","main":{"temp":21,"pressure":1021,"humidity":46,"temp_min":21,"temp_max":21},"visibility":10000,"wind":{"speed":1.5,"deg":80},"clouds":{"all":0},"dt":1502053200,"sys":{"type":1,"id":4580,"message":0.0031,"country":"BR","sunrise":1502011885,"sunset":1502052052},"id":3445847,"name":"Ubatuba","cod":200}'
+      string: '{"cod":"404","message":"city not found"}'
     http_version: 
   recorded_at: Sun, 06 Aug 2017 22:01:27 GMT
 recorded_with: VCR 3.0.3
