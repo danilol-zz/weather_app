@@ -3,8 +3,8 @@ require "httparty"
 class WeatherReport
   attr_accessor :options, :response
 
-  SERVICE_URL = "http://api.openweathermap.org/data/2.5/weather?"
-
+  SERVICE_URL = "http://api.openweathermap.org/data/2.5/weather?".freeze
+  ICON_URL    = "http://openweathermap.org/img/w".freeze
   UNITS = {
     fahrenheit: "imperial",
     celsius:    "metric",
@@ -16,7 +16,7 @@ class WeatherReport
   end
 
   def fetch
-    @response = HTTParty.get(SERVICE_URL, query: build_params)
+    @response = build_response(HTTParty.get(SERVICE_URL, query: build_params))
   end
 
   private
@@ -43,4 +43,29 @@ class WeatherReport
   def rand_lon
     rand(-180.000000000...180.000000000)
   end
+
+  def build_icon_link(icon)
+    "#{ICON_URL}/#{icon}.png"
+  end
+
+  def build_response(api_response)
+    OpenStruct.new(
+      city: api_response["name"],
+      country: api_response["sys"]["country"],
+      lat: api_response["coord"]["lat"],
+      lon: api_response["coord"]["lon"],
+      weather: {
+        main: api_response["weather"][0]["main"],
+        description: api_response["weather"][0]["description"],
+        icon: build_icon_link(api_response["weather"][0]["icon"]),
+        temp: api_response["main"]["temp"],
+        min: api_response["main"]["temp_min"],
+        max: api_response["main"]["temp_max"],
+        humidity: api_response["main"]["humidity"],
+        pressure: api_response["main"]["pressure"]
+      },
+      success?: true
+    )
+  end
 end
+

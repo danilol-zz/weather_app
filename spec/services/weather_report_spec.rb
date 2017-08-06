@@ -3,32 +3,48 @@ require 'rails_helper'
 describe WeatherReport do
   let(:weather_report) { described_class.new(options) }
 
-  context "By City report", vcr: { record: :once } do
-    let(:options) { { city: "Berlin" } }
+  context ".fetch", vcr: { record: :once } do
+    context "by city" do
+      let(:options) { { city: "Berlin" } }
 
-    before { weather_report.fetch }
+      before { weather_report.fetch }
 
-    it "returns the Berlin weather" do
-      expect(weather_report.response).to be_a HTTParty::Response
-      expect(weather_report.response.success?).to be true
-      expect(weather_report.response["weather"][0]["main"]).to eq "Clear"
-    end
-  end
-
-  context ".random_search", vcr: true do
-    let(:options) { { } }
-
-    before do
-      allow(weather_report).to receive(:rand_lat).and_return(27.33)
-      allow(weather_report).to receive(:rand_lon).and_return(98.09)
-      weather_report.fetch
+      it "returns the city weather" do
+        expect(weather_report.response).to be_a OpenStruct
+        expect(weather_report.response.success?).to be true
+        expect(weather_report.response.city).to           eq "Berlin"
+        expect(weather_report.response.weather[:main]).to eq "Clear"
+      end
     end
 
-    it "returns Random weather" do
-      expect(weather_report.response).to be_a HTTParty::Response
-      expect(weather_report.response.success?).to be true
-      expect(weather_report.response["name"]).to               eq "Cikai"
-      expect(weather_report.response["weather"][0]["main"]).to eq "Rain"
+    context "by geolocation" do
+      let(:options) { { lat: "-23.43", lon: -45.07 } }
+
+      before { weather_report.fetch }
+
+      it "returns the Berlin weather" do
+        expect(weather_report.response).to be_a OpenStruct
+        expect(weather_report.response.success?).to be true
+        expect(weather_report.response.city).to           eq "Ubatuba"
+        expect(weather_report.response.weather[:main]).to eq "Clear"
+      end
+    end
+
+    context "by coordinates" do
+      let(:options) { { } }
+
+      before do
+        allow(weather_report).to receive(:rand_lat).and_return(27.33)
+        allow(weather_report).to receive(:rand_lon).and_return(98.09)
+        weather_report.fetch
+      end
+
+      it "returns Random weather" do
+        expect(weather_report.response).to be_a OpenStruct
+        expect(weather_report.response.success?).to be true
+        expect(weather_report.response.city).to           eq "Cikai"
+        expect(weather_report.response.weather[:main]).to eq "Rain"
+      end
     end
   end
 end
