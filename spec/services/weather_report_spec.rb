@@ -3,7 +3,7 @@ require 'rails_helper'
 describe WeatherReport do
   let(:weather_report) { described_class.new(options) }
 
-  context "By City report", vcr: true do
+  context "By City report", vcr: { record: :once } do
     let(:options) { { city: "Berlin" } }
 
     before { weather_report.fetch }
@@ -24,7 +24,7 @@ describe WeatherReport do
       weather_report.fetch
     end
 
-    it "returns the Berlin weather" do
+    it "returns Random weather" do
       expect(weather_report.response).to be_a HTTParty::Response
       expect(weather_report.response.success?).to be true
       expect(weather_report.response["name"]).to               eq "Cikai"
