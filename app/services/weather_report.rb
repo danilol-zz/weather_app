@@ -2,6 +2,7 @@ require "httparty"
 
 class WeatherReport
   attr_accessor :options, :response
+  include HTTParty
 
   SERVICE_URL = "http://api.openweathermap.org/data/2.5/weather?".freeze
   ICON_URL    = "http://openweathermap.org/img/w".freeze
@@ -10,6 +11,8 @@ class WeatherReport
     celsius:    "metric",
     kelvin:     "",
   }.freeze
+
+  default_timeout = 0.001
 
   def initialize(options = {})
     @options = options
@@ -54,7 +57,18 @@ class WeatherReport
   end
 
   def call_api
-    HTTParty.get(SERVICE_URL, query: build_params)
+    handle_timeouts do
+      HTTParty.get(SERVICE_URL, query: build_params, timeout: 0.001)
+    end
+  end
+
+  def handle_timeouts
+    begin
+      yield
+    rescue Net::OpenTimeout, Net::ReadTimeout
+      byebug
+      {}
+    end
   end
 
   def build_response(api_response)
@@ -85,4 +99,3 @@ class WeatherReport
     )
   end
 end
-
