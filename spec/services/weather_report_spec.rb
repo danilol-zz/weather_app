@@ -67,20 +67,17 @@ describe WeatherReport do
       end
     end
 
-    context "when request reaches timeout " do
+    context "when request reaches timeout" do
       let(:options) { { city: "Berlin" } }
 
-      before do
-        WebMock.stub_request(:any, described_class.base_uri).to_timeout
-        weather_report.fetch
-      end
+      before { weather_report.fetch }
 
       it "returns Random weather" do
         pending
         expect(subject).to be_a OpenStruct
         expect(subject.success?).to be false
-        expect(subject.city).to           eq "Cikai"
-        expect(subject.weather[:main]).to eq "Rain"
+        expect(subject.code).to     eq "408"
+        expect(subject.message).to  eq "Request Timeout: execution expired"
       end
     end
   end

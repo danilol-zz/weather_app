@@ -1,0 +1,45 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://api.openweathermap.org/data/2.5/weather?appid=c4ec15791ed2c066cca8dd5d51ad6a74&q=Berlin&units=metric
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - openresty
+      Date:
+      - Mon, 07 Aug 2017 11:01:14 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '434'
+      Connection:
+      - keep-alive
+      X-Cache-Key:
+      - "/data/2.5/weather?q=berlin&units=metric"
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, POST
+    body:
+      encoding: UTF-8
+      string: '{"coord":{"lon":13.41,"lat":52.52},"weather":[{"id":800,"main":"Clear","description":"clear
+        sky","icon":"01d"}],"base":"stations","main":{"temp":21.51,"pressure":1022,"humidity":40,"temp_min":21,"temp_max":22},"visibility":10000,"wind":{"speed":2.1,"deg":220},"clouds":{"all":0},"dt":1502101200,"sys":{"type":1,"id":4892,"message":0.0024,"country":"DE","sunrise":1502076991,"sunset":1502131589},"id":2950159,"name":"Berlin","cod":200}'
+    http_version: 
+  recorded_at: Mon, 07 Aug 2017 11:01:14 GMT
+recorded_with: VCR 3.0.3
