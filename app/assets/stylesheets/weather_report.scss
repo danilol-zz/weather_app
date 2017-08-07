@@ -1,15 +1,31 @@
 .weather-bg {
+  border-radius: 2px;
   background-image: linear-gradient(to top, #00c6fb 0%, #005bea 100%);
   color: #fff;
   small {
     color: inherit;
   }
+  .zebra-list{
+    margin-top: 50px;
+    list-style: none;
+    li:nth-child(odd){
+      background-color: rgba(255,255,255,0.1);
+    }
+  }
   .temperature-container {
     position: absolute;
+    width: 130px;
     right: 10px;
     top: 10px;
     .degrees {
       font-size: 40px;
+      display: inline;
+    }
+    .time {
+      font-size: 11px;
+    }
+    .lat_lon {
+      margin-bottom: 20px;
     }
   }
 }

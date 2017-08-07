@@ -36,34 +36,39 @@
         <h1 class="h3">Weather Report</h1>
       </header>
       <% if @report.success? %>
-        <div class="col-sm-6 col-md-offset-3 weather-bg" style=" border-radius: 2px; ">
+        <div class="col-sm-6 col-md-offset-3 weather-bg">
           <div class="">
             <div class="pull-right temperature-container"> <%= image_tag @report.weather[:icon] %>
               <div class="degrees"><%= @report.weather[:temp].round %>°</div>
-              <small>as of <%= Time.now.strftime("%H:%M") %></small>
+              <div class="time">as of <%= Time.now.strftime("%H:%M") %></div>
             </div>
-            <h2 class="text-center"><%= @report.city %>, <%= @report.country %></h2>
+              <h2 class="text-center">
+                <% if @report.city.present? %>
+                  <%= @report.city %>, <%= @report.country %>
+                <% end %>
+              </h2>
             <div class="text-center"><strong class="text-uppercase"><%= "#{@report.weather[:description]}" %></strong></div>
-            <div class="text-center" style=" margin-bottom: 20px;">Lat: <%= @report.lat %> Lon: <%= @report.lon %></div>
+            <div class="text-center lat_lon">Lat: <%= @report.lat %> Lon: <%= @report.lon %></div>
             <div class="row">
               <div class="col-sm-6">
-                <ul>
+                <ul class="zebra-list">
                   <li><%= "Min #{@report.weather[:min]}° - Max #{@report.weather[:max]}°" %></li>
-                  <li>Pressure: <%= @report.weather[:pressure] %> hpa</li><div style=" background-color: rgba(255,255,255, 0.1);"> Humidity: <%= @report.weather[:humidity] %>%</div>
+                  <li>Pressure: <%= @report.weather[:pressure] %> hpa</li>
+                  <li> Humidity: <%= @report.weather[:humidity] %>%</li>
                 </ul>
               </div>
               <div class="col-sm-6">
-                <ul>
+                <ul class="zebra-list">
                   <li>Wind: S 6 mph</li>
                   <li>Dew Point: 45 deg</li>
-                  <li style=" background-color: rgba(255,255,255, 0.1); ">Visibility: 10.0 mi</li>
+                  <li>Visibility: 10.0 mi</li>
                 </ul>
               </div>
             </div>
           </div>
         </div>
       <% else %>
-        <div class="col-sm-6 col-md-offset-3 weather-bg" style=" border-radius: 2px; ">
+        <div class="col-sm-6 col-md-offset-3 weather-bg">
           <small class="text-uppercase">Error</small>
           <%= @report.code %> - <%= @report.message %>
         </div>
