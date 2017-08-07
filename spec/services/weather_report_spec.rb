@@ -68,15 +68,18 @@ describe WeatherReport do
     end
 
     context "when request reaches timeout" do
+      let(:response) { OpenStruct.new(code: 408, message: "Request Timeout: execution expired", success?: false) }
       let(:options) { { city: "Berlin" } }
 
-      before { weather_report.fetch }
+      before do
+        allow(weather_report).to receive(:handle_timeouts).and_return(response)
+        weather_report.fetch
+      end
 
       it "returns Random weather" do
-        pending
         expect(subject).to be_a OpenStruct
         expect(subject.success?).to be false
-        expect(subject.code).to     eq "408"
+        expect(subject.code).to     eq 408
         expect(subject.message).to  eq "Request Timeout: execution expired"
       end
     end

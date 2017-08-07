@@ -53,7 +53,7 @@ class WeatherReport
         end
       end
     rescue
-      build_response({ "cod" => "999", "message" => "Internal Error"})
+      build_response({ "cod" => 500, "message" => "Internal Error"})
     end
   end
 
@@ -61,14 +61,14 @@ class WeatherReport
     begin
       yield
     rescue Net::OpenTimeout, Net::ReadTimeout
-      { "cod" => "408", "message" => "Request Timeout: execution expired" }
+      build_response({ "cod" => 408, "message" => "Request Timeout: execution expired" })
     end
   end
 
   def cache_key
     if build_params[:q].present?
       "weather_app:city:#{ build_params[:q] }"
-    elsif build_params[:lat].present? && build_params[:lon].present?
+    else
       "weather_app:lat_x_lon:#{build_params[:lat]}_#{build_params[:lon]}"
     end
   end
