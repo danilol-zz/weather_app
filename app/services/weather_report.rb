@@ -13,13 +13,7 @@ class WeatherReport
   end
 
   def fetch
-    result = call_api
-
-    @response = if result.respond_to?(:success?) && result.success?
-                  build_response(result)
-                else
-                  build_error_response(result)
-                end
+    @response = request_service
   end
 
   private
@@ -51,9 +45,15 @@ class WeatherReport
     "#{ICON_URL}/#{icon}.png"
   end
 
-  def call_api
-    handle_timeouts do
-      self.class.get("/2.5/weather?", { query: build_params })
+  def request_service
+    begin
+      handle_timeouts do
+        handle_caching do
+          self.class.get("/2.5/weather?", { query: build_params })
+        end
+      end
+    rescue
+      build_response({ "cod" => "999", "message" => "Internal Error"})
     end
   end
 
@@ -65,10 +65,40 @@ class WeatherReport
     end
   end
 
+  def cache_key
+    if build_params[:q].present?
+      "weather_app:city:#{ build_params[:q] }"
+    elsif build_params[:lat].present? && build_params[:lon].present?
+      "weather_app:lat_x_lon:#{build_params[:lat]}_#{build_params[:lon]}"
+    end
+  end
+
+  def handle_caching
+    mc = Dalli::Client.new
+    if cached = mc.get(cache_key)
+      build_response(JSON[cached])
+    else
+      yield.tap do |result|
+        if result.success?
+          mc.set(cache_key, result.to_json)
+        end
+
+        return build_response(JSON[result.to_json])
+      end
+    end
+  end
+
   def build_response(api_response)
+    if api_response["cod"] == 200
+      build_success_response(api_response)
+    else
+      build_error_response(api_response)
+    end
+  end
+
+  def build_success_response(api_response)
     OpenStruct.new(
-      code: api_response.response.code,
-      uri: api_response.request.last_uri,
+      code: api_response["cod"],
       city: api_response["name"],
       country: api_response["sys"]["country"],
       lat: api_response["coord"]["lat"],
@@ -89,7 +119,7 @@ class WeatherReport
 
   def build_error_response(api_response)
     OpenStruct.new(
-      code: api_response["cod"],
+      code: api_response["cod"].to_i,
       message: api_response["message"],
       success?: false
     )

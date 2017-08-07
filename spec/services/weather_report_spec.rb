@@ -15,7 +15,7 @@ describe WeatherReport do
         it "returns the city weather" do
           expect(subject).to be_a OpenStruct
           expect(subject.success?).to be true
-          expect(subject.code).to           eq "200"
+          expect(subject.code).to           eq 200
           expect(subject.city).to           eq "Berlin"
           expect(subject.weather[:main]).to eq "Clear"
         end
@@ -29,7 +29,7 @@ describe WeatherReport do
         it "returns the city weather" do
           expect(subject).to be_a OpenStruct
           expect(subject.success?).to be false
-          expect(subject.code).to      eq "404"
+          expect(subject.code).to     eq 404
           expect(subject.message).to  eq "city not found"
         end
       end
@@ -43,7 +43,7 @@ describe WeatherReport do
       it "returns the Berlin weather" do
         expect(subject).to be_a OpenStruct
         expect(subject.success?).to be true
-        expect(subject.code).to           eq "200"
+        expect(subject.code).to           eq 200
         expect(subject.city).to           eq "Ubatuba"
         expect(subject.weather[:main]).to eq "Clear"
       end
@@ -61,7 +61,7 @@ describe WeatherReport do
       it "returns Random weather" do
         expect(subject).to be_a OpenStruct
         expect(subject.success?).to be true
-        expect(subject.code).to           eq "200"
+        expect(subject.code).to           eq 200
         expect(subject.city).to           eq "Cikai"
         expect(subject.weather[:main]).to eq "Rain"
       end
