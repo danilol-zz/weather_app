@@ -50,18 +50,11 @@
             <div class="text-center"><strong class="text-uppercase"><%= "#{@report.weather[:description]}" %></strong></div>
             <div class="text-center lat_lon">Lat: <%= @report.lat %> Lon: <%= @report.lon %></div>
             <div class="row">
-              <div class="col-sm-6">
+              <div class="col-sm-12">
                 <ul class="zebra-list">
                   <li><%= "Min #{@report.weather[:min]}° - Max #{@report.weather[:max]}°" %></li>
                   <li>Pressure: <%= @report.weather[:pressure] %> hpa</li>
                   <li> Humidity: <%= @report.weather[:humidity] %>%</li>
-                </ul>
-              </div>
-              <div class="col-sm-6">
-                <ul class="zebra-list">
-                  <li>Wind: S 6 mph</li>
-                  <li>Dew Point: 45 deg</li>
-                  <li>Visibility: 10.0 mi</li>
                 </ul>
               </div>
             </div>
