@@ -26,7 +26,7 @@ class WeatherReport
 
   def build_params
     request_params = {
-      appid: Rails.application.secrets.weather_api,
+      appid: Rails.application.secrets.weather_api_key,
       units: UNITS[:celsius],
     }
 
