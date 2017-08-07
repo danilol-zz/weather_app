@@ -8,31 +8,21 @@
 <section class="search-form">
   <%= form_for :weather_report, method: :get do |f| %>
     <div class="row">
-      <div class="col-sm-4">
-        <div class="row">
-          <div class="col-sm-6">
-            <%= text_field_tag :city, nil, value: params[:city], placeholder: "City name, Geolocation, or Random", class: "form-control input-lg" %>
+      <div class="col-sm-12">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-sm-4">
+                <%= text_field_tag :city, nil, value: params[:city], placeholder: "City name, Geolocation, or Random", class: "form-control input-lg" %>
+              </div>
+              <div class="col-sm-4">
+                <%= f.submit "By City", class: "btn btn-primary btn-lg" %>
+              </div>
+              <div class="col-sm-4">
+                <%= f.submit "Random Location", class: "btn btn-primary btn-lg" %>
+              </div>
+            </div>
           </div>
-          <div class="col-sm-6">
-            <%= f.submit "By City", class: "btn btn-primary btn-lg" %>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-8 text-right">
-        <%= submit_tag "Random Location", class: "btn btn-primary btn-lg" %>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-sm-8">
-        <div class="row">
-          <div class="col-xs-3">
-            <%= text_field_tag :lat, nil, value: params[:lat], placeholder: "Latitude", class: "form-control input-lg" %>
-          </div>
-          <div class="col-xs-3">
-            <%= text_field_tag :lon, nil, value: params[:lon], placeholder: "Longitude", class: "form-control input-lg" %>
-          </div>
-          <%= submit_tag "By Lat x Long", class: "btn btn-primary btn-lg" %>
         </div>
       </div>
     </div>
@@ -40,55 +30,54 @@
 </section>
 
 <section class="search-results">
-  <header>
-    <h1 class="h3">Weather Report</h1>
-  </header>
+  <div class="row">
+    <div class="col-sm-6">
+      <header>
+        <h1 class="h3">Weather Report</h1>
+      </header>
 
-  <% if @report.success? %>
-    <ol class="list-group">
-      <li class="list-group-item clearfix" ng-repeat="customer in customers">
-        <h3 class="pull-right">
-          <small class="text-uppercase">Time</small>
-          <%= DateTime.now %>
-        </h3>
-        <h2 class="h3">
-          <%= @report.city %> <%= @report.country %>
-          <small>
-            Lat: <%= @report.lat %>
-          Lon: <%= @report.lon %>
-      </small>
-    </h2>
+      <% if @report.success? %>
+        <ol class="list-group">
+          <li class="list-group-item clearfix weather-bg">
+            <h3 class="pull-right">
+              <%= Time.now.strftime("%H:%M") %>
+            </h3>
+            <h2>
+              <%= @report.city %>, <%= @report.country %>
+              <small>Lat: <%= @report.lat %> Lon: <%= @report.lon %></small>
+            </h2>
 
-    <h4>Weather</h4>
-    <small>
-      <%= "#{@report.weather[:main]} - #{@report.weather[:description]}" %>
-      <%= image_tag @report.weather[:icon] %>
-    </small>
+            <span class="temperature">
+              <%= @report.weather[:temp].round %>°
+            </span>
 
-    <h3>Temperature</h3>
-    <small>
-      <%= @report.weather[:temp] %>
-    </small>
+            <p class="text-uppercase">
+              <%= "#{@report.weather[:description]}" %>
+              <%= image_tag @report.weather[:icon] %>
+            </p>
 
-    <h3>Min - Max</h3>
-    <small>
-      <%= "#{@report.weather[:min]} - #{@report.weather[:max]}" %>
-    </small>
 
-    <h3>Humidity and pressure</h3>
-    <small>
-      <%= "#{@report.weather[:humidity]} - #{@report.weather[:pressure]}" %>
-    </small>
-  </li>
-</ol>
-<% else %>
-  <ol class="list-group">
-    <li class="list-group-item clearfix" ng-repeat="customer in customers">
-      <h3 class="pull-right">
-        <small class="text-uppercase">Error</small>
-        <%= @report.code %> - <%= @report.message %>
-      </h3>
-    </li>
-  </ol>
-<% end %>
+            <h3>Min - Max</h3>
+            <small>
+              <%= "#{@report.weather[:min]}° - #{@report.weather[:max]}°" %>
+            </small>
+
+            <h3>Humidity and pressure</h3>
+            <small>
+              <%= "#{@report.weather[:humidity]} - #{@report.weather[:pressure]}" %>
+            </small>
+          </li>
+        </ol>
+      <% else %>
+        <ol class="list-group">
+          <li class="list-group-item clearfix" ng-repeat="customer in customers">
+            <h3 class="pull-right">
+              <small class="text-uppercase">Error</small>
+              <%= @report.code %> - <%= @report.message %>
+            </h3>
+          </li>
+        </ol>
+      <% end %>
+    </div>
+  </div>
 </section>
