@@ -1,18 +1,12 @@
 require "httparty"
 
 class WeatherReport
-  attr_accessor :options, :response
   include HTTParty
 
-  SERVICE_URL = "http://api.openweathermap.org/data/2.5/weather?".freeze
-  ICON_URL    = "http://openweathermap.org/img/w".freeze
-  UNITS = {
-    fahrenheit: "imperial",
-    celsius:    "metric",
-    kelvin:     "",
-  }.freeze
+  attr_accessor :options, :response
 
-  default_timeout = 0.001
+  base_uri        'api.openweathermap.org/data/'
+  default_timeout 1
 
   def initialize(options = {})
     @options = options
@@ -20,7 +14,8 @@ class WeatherReport
 
   def fetch
     result = call_api
-    @response = if result.success?
+
+    @response = if result.respond_to?(:success?) && result.success?
                   build_response(result)
                 else
                   build_error_response(result)
@@ -45,11 +40,11 @@ class WeatherReport
   end
 
   def rand_lat
-    rand(-90.000000000...90.000000000)
+    rand(-90.000000...90.000000)
   end
 
   def rand_lon
-    rand(-180.000000000...180.000000000)
+    rand(-180.000000...180.000000)
   end
 
   def build_icon_link(icon)
@@ -58,7 +53,7 @@ class WeatherReport
 
   def call_api
     handle_timeouts do
-      HTTParty.get(SERVICE_URL, query: build_params, timeout: 0.001)
+      self.class.get("/2.5/weather?", { query: build_params })
     end
   end
 
@@ -66,13 +61,14 @@ class WeatherReport
     begin
       yield
     rescue Net::OpenTimeout, Net::ReadTimeout
-      byebug
-      {}
+      { "cod" => "408", "message" => "Request Timeout: execution expired" }
     end
   end
 
   def build_response(api_response)
     OpenStruct.new(
+      code: api_response.response.code,
+      uri: api_response.request.last_uri,
       city: api_response["name"],
       country: api_response["sys"]["country"],
       lat: api_response["coord"]["lat"],
@@ -93,9 +89,17 @@ class WeatherReport
 
   def build_error_response(api_response)
     OpenStruct.new(
-      cod: api_response["cod"],
+      code: api_response["cod"],
       message: api_response["message"],
       success?: false
     )
   end
+
+  ICON_URL    = "http://openweathermap.org/img/w".freeze
+
+  UNITS = {
+    fahrenheit: "imperial",
+    celsius:    "metric",
+    kelvin:     "",
+  }.freeze
 end

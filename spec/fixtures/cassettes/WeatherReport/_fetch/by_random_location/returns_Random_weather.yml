@@ -21,11 +21,11 @@ http_interactions:
       Server:
       - openresty
       Date:
-      - Sun, 06 Aug 2017 22:01:27 GMT
+      - Mon, 07 Aug 2017 10:30:23 GMT
       Content-Type:
       - application/json; charset=utf-8
       Content-Length:
-      - '467'
+      - '473'
       Connection:
       - keep-alive
       X-Cache-Key:
@@ -39,7 +39,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: '{"coord":{"lon":98.09,"lat":27.33},"weather":[{"id":501,"main":"Rain","description":"moderate
-        rain","icon":"10n"}],"base":"stations","main":{"temp":18.81,"pressure":863,"humidity":100,"temp_min":18.81,"temp_max":18.81,"sea_level":1017.31,"grnd_level":863},"wind":{"speed":0.86,"deg":57.5001},"rain":{"3h":5.535},"clouds":{"all":92},"dt":1502056887,"sys":{"message":0.0033,"country":"CN","sunrise":1501973662,"sunset":1502021528},"id":1281497,"name":"Cikai","cod":200}'
+        rain","icon":"10d"}],"base":"stations","main":{"temp":19.94,"pressure":864.02,"humidity":100,"temp_min":19.94,"temp_max":19.94,"sea_level":1017.97,"grnd_level":864.02},"wind":{"speed":0.62,"deg":136.001},"rain":{"3h":4.265},"clouds":{"all":92},"dt":1502101823,"sys":{"message":0.0036,"country":"CN","sunrise":1502060079,"sunset":1502107903},"id":1281497,"name":"Cikai","cod":200}'
     http_version: 
-  recorded_at: Sun, 06 Aug 2017 22:01:27 GMT
+  recorded_at: Mon, 07 Aug 2017 10:30:24 GMT
 recorded_with: VCR 3.0.3

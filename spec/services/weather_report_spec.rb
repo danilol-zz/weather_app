@@ -4,6 +4,8 @@ describe WeatherReport do
   let(:weather_report) { described_class.new(options) }
 
   context ".fetch", vcr: { record: :once } do
+    subject { weather_report.response }
+
     context "by city" do
       context "when the city exists" do
         let(:options) { { city: "Berlin" } }
@@ -11,10 +13,11 @@ describe WeatherReport do
         before { weather_report.fetch }
 
         it "returns the city weather" do
-          expect(weather_report.response).to be_a OpenStruct
-          expect(weather_report.response.success?).to be true
-          expect(weather_report.response.city).to           eq "Berlin"
-          expect(weather_report.response.weather[:main]).to eq "Clear"
+          expect(subject).to be_a OpenStruct
+          expect(subject.success?).to be true
+          expect(subject.code).to           eq "200"
+          expect(subject.city).to           eq "Berlin"
+          expect(subject.weather[:main]).to eq "Clear"
         end
       end
 
@@ -24,10 +27,10 @@ describe WeatherReport do
         before { weather_report.fetch }
 
         it "returns the city weather" do
-          expect(weather_report.response).to be_a OpenStruct
-          expect(weather_report.response.success?).to be false
-          expect(weather_report.response.cod).to      eq "404"
-          expect(weather_report.response.message).to  eq "city not found"
+          expect(subject).to be_a OpenStruct
+          expect(subject.success?).to be false
+          expect(subject.code).to      eq "404"
+          expect(subject.message).to  eq "city not found"
         end
       end
     end
@@ -38,14 +41,15 @@ describe WeatherReport do
       before { weather_report.fetch }
 
       it "returns the Berlin weather" do
-        expect(weather_report.response).to be_a OpenStruct
-        expect(weather_report.response.success?).to be true
-        expect(weather_report.response.city).to           eq "Ubatuba"
-        expect(weather_report.response.weather[:main]).to eq "Clear"
+        expect(subject).to be_a OpenStruct
+        expect(subject.success?).to be true
+        expect(subject.code).to           eq "200"
+        expect(subject.city).to           eq "Ubatuba"
+        expect(subject.weather[:main]).to eq "Clear"
       end
     end
 
-    context "by coordinates" do
+    context "by random location" do
       let(:options) { { } }
 
       before do
@@ -55,10 +59,28 @@ describe WeatherReport do
       end
 
       it "returns Random weather" do
-        expect(weather_report.response).to be_a OpenStruct
-        expect(weather_report.response.success?).to be true
-        expect(weather_report.response.city).to           eq "Cikai"
-        expect(weather_report.response.weather[:main]).to eq "Rain"
+        expect(subject).to be_a OpenStruct
+        expect(subject.success?).to be true
+        expect(subject.code).to           eq "200"
+        expect(subject.city).to           eq "Cikai"
+        expect(subject.weather[:main]).to eq "Rain"
+      end
+    end
+
+    context "when request reaches timeout " do
+      let(:options) { { city: "Berlin" } }
+
+      before do
+        WebMock.stub_request(:any, described_class.base_uri).to_timeout
+        weather_report.fetch
+      end
+
+      it "returns Random weather" do
+        pending
+        expect(subject).to be_a OpenStruct
+        expect(subject.success?).to be false
+        expect(subject.city).to           eq "Cikai"
+        expect(subject.weather[:main]).to eq "Rain"
       end
     end
   end
