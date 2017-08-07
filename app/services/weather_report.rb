@@ -74,13 +74,12 @@ class WeatherReport
   end
 
   def handle_caching
-    mc = Dalli::Client.new
-    if cached = mc.get(cache_key)
+    if cached = Rails.cache.fetch(cache_key)
       build_response(JSON[cached])
     else
       yield.tap do |result|
         if result.success?
-          mc.set(cache_key, result.to_json)
+          Rails.cache.write(cache_key, result.to_json)
         end
 
         return build_response(JSON[result.to_json])
