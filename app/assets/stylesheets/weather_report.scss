@@ -4,7 +4,12 @@
   small {
     color: inherit;
   }
-  .temperature {
-    font-size: 40px;
+  .temperature-container {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    .degrees {
+      font-size: 40px;
+    }
   }
 }

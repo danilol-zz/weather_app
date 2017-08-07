@@ -31,52 +31,42 @@
 
 <section class="search-results">
   <div class="row">
-    <div class="col-sm-6">
+    <div class="weather-box">
       <header>
         <h1 class="h3">Weather Report</h1>
       </header>
-
       <% if @report.success? %>
-        <ol class="list-group">
-          <li class="list-group-item clearfix weather-bg">
-            <h3 class="pull-right">
-              <%= Time.now.strftime("%H:%M") %>
-            </h3>
-            <h2>
-              <%= @report.city %>, <%= @report.country %>
-              <small>Lat: <%= @report.lat %> Lon: <%= @report.lon %></small>
-            </h2>
-
-            <span class="temperature">
-              <%= @report.weather[:temp].round %>°
-            </span>
-
-            <p class="text-uppercase">
-              <%= "#{@report.weather[:description]}" %>
-              <%= image_tag @report.weather[:icon] %>
-            </p>
-
-
-            <h3>Min - Max</h3>
-            <small>
-              <%= "#{@report.weather[:min]}° - #{@report.weather[:max]}°" %>
-            </small>
-
-            <h3>Humidity and pressure</h3>
-            <small>
-              <%= "#{@report.weather[:humidity]} - #{@report.weather[:pressure]}" %>
-            </small>
-          </li>
-        </ol>
+        <div class="col-sm-6 col-md-offset-3 weather-bg" style=" border-radius: 2px; ">
+          <div class="">
+            <div class="pull-right temperature-container"> <%= image_tag @report.weather[:icon] %>
+              <div class="degrees"><%= @report.weather[:temp].round %>°</div>
+              <small>as of <%= Time.now.strftime("%H:%M") %></small>
+            </div>
+            <h2 class="text-center"><%= @report.city %>, <%= @report.country %></h2>
+            <div class="text-center"><strong class="text-uppercase"><%= "#{@report.weather[:description]}" %></strong></div>
+            <div class="text-center" style=" margin-bottom: 20px;">Lat: <%= @report.lat %> Lon: <%= @report.lon %></div>
+            <div class="row">
+              <div class="col-sm-6">
+                <ul>
+                  <li><%= "Min #{@report.weather[:min]}° - Max #{@report.weather[:max]}°" %></li>
+                  <li>Pressure: <%= @report.weather[:pressure] %> hpa</li><div style=" background-color: rgba(255,255,255, 0.1);"> Humidity: <%= @report.weather[:humidity] %>%</div>
+                </ul>
+              </div>
+              <div class="col-sm-6">
+                <ul>
+                  <li>Wind: S 6 mph</li>
+                  <li>Dew Point: 45 deg</li>
+                  <li style=" background-color: rgba(255,255,255, 0.1); ">Visibility: 10.0 mi</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
       <% else %>
-        <ol class="list-group">
-          <li class="list-group-item clearfix" ng-repeat="customer in customers">
-            <h3 class="pull-right">
-              <small class="text-uppercase">Error</small>
-              <%= @report.code %> - <%= @report.message %>
-            </h3>
-          </li>
-        </ol>
+        <div class="col-sm-6 col-md-offset-3 weather-bg" style=" border-radius: 2px; ">
+          <small class="text-uppercase">Error</small>
+          <%= @report.code %> - <%= @report.message %>
+        </div>
       <% end %>
     </div>
   </div>
