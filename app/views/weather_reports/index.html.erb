@@ -13,7 +13,7 @@
           <div class="panel-body">
             <div class="row">
               <div class="col-sm-4">
-                <%= text_field_tag :city, nil, value: params[:city], placeholder: "City name", class: "form-control input-lg" %>
+                <%= text_field_tag :city, nil, required: true, value: params[:city], placeholder: "City name", class: "form-control input-lg" %>
               </div>
               <div class="col-sm-4">
                 <%= f.submit "By City", class: "btn btn-primary btn-lg" %>
@@ -42,11 +42,11 @@
               <div class="degrees"><%= @report.weather[:temp].round %>°</div>
               <div class="time">as of <%= Time.now.strftime("%H:%M") %></div>
             </div>
-              <h2 class="text-center">
-                <% if @report.city.present? %>
-                  <%= @report.city %>, <%= @report.country %>
-                <% end %>
-              </h2>
+            <h2 class="text-center">
+              <% if @report.city.present? %>
+                <%= @report.city %>, <%= @report.country %>
+              <% end %>
+            </h2>
             <div class="text-center"><strong class="text-uppercase"><%= "#{@report.weather[:description]}" %></strong></div>
             <div class="text-center lat_lon">Lat: <%= @report.lat %> Lon: <%= @report.lon %></div>
             <div class="row">
