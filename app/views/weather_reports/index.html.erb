@@ -13,7 +13,7 @@
           <div class="panel-body">
             <div class="row">
               <div class="col-sm-4">
-                <%= text_field_tag :city, nil, value: params[:city], placeholder: "City name, Geolocation, or Random", class: "form-control input-lg" %>
+                <%= text_field_tag :city, nil, value: params[:city], placeholder: "City name", class: "form-control input-lg" %>
               </div>
               <div class="col-sm-4">
                 <%= f.submit "By City", class: "btn btn-primary btn-lg" %>
@@ -61,8 +61,8 @@
           </div>
         </div>
       <% else %>
-        <div class="col-sm-6 col-md-offset-3 weather-bg">
-          <small class="text-uppercase">Error</small>
+        <div class="col-sm-6 offset-3 weather-bg">
+          <p class="text-uppercase">Error</p>
           <%= @report.code %> - <%= @report.message %>
         </div>
       <% end %>
